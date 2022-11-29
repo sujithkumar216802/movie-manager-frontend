@@ -1,15 +1,5 @@
-const routes = {
-    404: '/html/404.html',
-    '/': '/html/home.html',
-    '/login': '/html/login.html',
-    '/register': '/html/register.html',
-    '/logout': '/html/logout.html',
-    '/edit': '/html/edit.html',
-    '/add': '/html/add.html'
-};
-
-const scripts = {
-    404: null,
+const functions = {
+    404: notFound,
     '/': home,
     '/login': login,
     '/register': register,
@@ -21,12 +11,75 @@ const scripts = {
 var movies;
 var update_index;
 const error_message = document.getElementById('error');
+const page_container = document.getElementById('page-container');
+const heading = document.getElementById('heading');
+
+function notFound() {
+    heading.innerText = 'Not Found';
+}
 
 function register() {
-    const register = document.getElementById('register-button');
-    register.addEventListener('click', async () => {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+    heading.innerText = 'Register';
+
+    const email_label = document.createElement('label');
+    email_label.setAttribute('for', 'email');
+    email_label.innerText = 'Email:';
+
+    const email_input = document.createElement('input');
+    email_input.setAttribute('type', 'text');
+    email_input.setAttribute('id', 'email');
+    email_input.setAttribute('name', 'email');
+    email_input.setAttribute('placeholder', 'Email');
+
+    const password_label = document.createElement('label');
+    password_label.setAttribute('for', 'password');
+    password_label.innerText = 'Password (Atleast 8 Characters):';
+
+    const password_input = document.createElement('input');
+    password_input.setAttribute('type', 'password');
+    password_input.setAttribute('id', 'password');
+    password_input.setAttribute('name', 'password');
+    password_input.setAttribute('placeholder', 'Password');
+
+    const register_button = document.createElement('button');
+    register_button.setAttribute('type', 'submit');
+    register_button.setAttribute('id', 'register-button');
+    register_button.innerText = 'Register';
+
+    const login_link = document.createElement('a');
+    login_link.setAttribute('href', '/login');
+    login_link.setAttribute('onclick', 'route()');
+    login_link.innerText = 'login';
+
+    const table_row_1 = document.createElement('tr');
+    const table_col_11 = document.createElement('td');
+    table_col_11.appendChild(email_label);
+    const table_col_12 = document.createElement('td');
+    table_col_12.appendChild(email_input);
+    table_row_1.appendChild(table_col_11);
+    table_row_1.appendChild(table_col_12);
+
+
+    const table_row_2 = document.createElement('tr');
+    const table_col_21 = document.createElement('td');
+    table_col_21.appendChild(password_label);
+    const table_col_22 = document.createElement('td');
+    table_col_22.appendChild(password_input);
+    table_row_2.appendChild(table_col_21);
+    table_row_2.appendChild(table_col_22);
+
+    const table = document.createElement('table');
+    table.appendChild(table_row_1);
+    table.appendChild(table_row_2);
+
+    page_container.appendChild(table);
+    page_container.appendChild(register_button);
+    page_container.appendChild(document.createElement('br'));
+    page_container.appendChild(login_link);
+
+    register_button.addEventListener('click', async () => {
+        const email = email_input.value;
+        const password = password_input.value;
         if (password == '') {
             errorMessage('Password Is Empty');
             return;
@@ -35,14 +88,21 @@ function register() {
             'email': email,
             'password': password
         }
-        const response = await fetch('http://localhost:8080/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(body)
-        });
+        var response;
+        try {
+            response = await fetch('http://localhost:8080/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(body)
+            });
+        }
+        catch (e) {
+            heading.innerText = 'Server Not Reachable';
+            return;
+        }
         if (response.status == 201) {
             clearErrorMessage();
             window.history.pushState({}, '', '/login');
@@ -55,22 +115,86 @@ function register() {
 }
 
 function login() {
-    const login = document.getElementById('login-button');
-    login.addEventListener('click', async () => {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+    heading.innerText = 'Login';
+
+    const email_label = document.createElement('label');
+    email_label.setAttribute('for', 'email');
+    email_label.innerText = 'Email:';
+
+    const email_input = document.createElement('input');
+    email_input.setAttribute('type', 'text');
+    email_input.setAttribute('id', 'email');
+    email_input.setAttribute('name', 'email');
+    email_input.setAttribute('placeholder', 'Email');
+
+    const password_label = document.createElement('label');
+    password_label.setAttribute('for', 'password');
+    password_label.innerText = 'Password (Atleast 8 Characters):';
+
+    const password_input = document.createElement('input');
+    password_input.setAttribute('type', 'password');
+    password_input.setAttribute('id', 'password');
+    password_input.setAttribute('name', 'password');
+    password_input.setAttribute('placeholder', 'Password');
+
+    const login_button = document.createElement('button');
+    login_button.setAttribute('type', 'submit');
+    login_button.setAttribute('id', 'login-button');
+    login_button.innerText = 'Login';
+
+    const register_link = document.createElement('a');
+    register_link.setAttribute('href', '/register');
+    register_link.setAttribute('onclick', 'route()');
+    register_link.innerText = 'register';
+
+    const table_row_1 = document.createElement('tr');
+    const table_col_11 = document.createElement('td');
+    table_col_11.appendChild(email_label);
+    const table_col_12 = document.createElement('td');
+    table_col_12.appendChild(email_input);
+    table_row_1.appendChild(table_col_11);
+    table_row_1.appendChild(table_col_12);
+
+
+    const table_row_2 = document.createElement('tr');
+    const table_col_21 = document.createElement('td');
+    table_col_21.appendChild(password_label);
+    const table_col_22 = document.createElement('td');
+    table_col_22.appendChild(password_input);
+    table_row_2.appendChild(table_col_21);
+    table_row_2.appendChild(table_col_22);
+
+    const table = document.createElement('table');
+    table.appendChild(table_row_1);
+    table.appendChild(table_row_2);
+
+    page_container.appendChild(table);
+    page_container.appendChild(login_button);
+    page_container.appendChild(document.createElement('br'));
+    page_container.appendChild(register_link);
+
+    login_button.addEventListener('click', async () => {
+        const email = email_input.value;
+        const password = password_input.value;
         const body = {
             'email': email,
             'password': password
         }
-        const response = await fetch('http://localhost:8080/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(body)
-        });
+        var response;
+        try {
+            response = await fetch('http://localhost:8080/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(body)
+            });
+        }
+        catch (e) {
+            heading.innerText = 'Server Not Reachable';
+            return;
+        }
         if (response.status == 200) {
             clearErrorMessage();
             window.history.pushState({}, '', '/');
@@ -83,10 +207,19 @@ function login() {
 }
 
 async function logout() {
-    const response = await fetch('http://localhost:8080/logout', {
-        method: 'POST',
-        credentials: 'include',
-    });
+    heading.innerText = 'logout';
+
+    var response;
+    try {
+        response = await fetch('http://localhost:8080/logout', {
+            method: 'POST',
+            credentials: 'include',
+        });
+    }
+    catch (e) {
+        heading.innerText = 'Server Not Reachable';
+        return;
+    }
     if (response.status == 200 || response.status >= 401) {
         window.history.pushState({}, '', '/login');
         handleRoute();
@@ -97,10 +230,33 @@ async function logout() {
 }
 
 async function home() {
-    const movies_fetch = await fetch('http://localhost:8080/', {
-        method: 'GET',
-        credentials: 'include',
-    });
+    heading.innerText = 'Movie List';
+
+    const add_link = document.createElement('a');
+    add_link.setAttribute('href', '/add');
+    add_link.setAttribute('onclick', 'route()');
+    add_link.innerText = 'Add movie';
+
+    const logout_link = document.createElement('a');
+    logout_link.setAttribute('href', '/logout');
+    logout_link.setAttribute('onclick', 'route()');
+    logout_link.innerText = 'Logout';
+
+    page_container.appendChild(add_link);
+    page_container.appendChild(document.createElement('br'));
+    page_container.appendChild(logout_link);
+
+    var movies_fetch
+    try {
+        movies_fetch = await fetch('http://localhost:8080/', {
+            method: 'GET',
+            credentials: 'include',
+        });
+    }
+    catch (e) {
+        heading.innerText = 'Server Not Reachable';
+        return;
+    }
     if (movies_fetch.status >= 401) {
         if (movies_fetch.status == 403) {
             errorMessage('Session Expired');
@@ -111,7 +267,6 @@ async function home() {
     else {
         movies = await movies_fetch.json();
 
-        const home_page = document.getElementById('home');
         movies.forEach(element => {
             const container = document.createElement('div');
             const table = document.createElement('table');
@@ -180,14 +335,21 @@ async function home() {
             const del_button = document.createElement('button');
             del_button.setAttribute('id', element[['id']]);
             del_button.addEventListener('click', async (event) => {
-                const response = await fetch('http://localhost:8080/delete', {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({ 'id': event.target.getAttribute('id') })
-                });
+                var response;
+                try {
+                    response = await fetch('http://localhost:8080/delete', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({ 'id': event.target.getAttribute('id') })
+                    });
+                }
+                catch (e) {
+                    heading.innerText = 'Server Not Reachable';
+                    return;
+                }
                 if (response.status == 200) {
                     clearErrorMessage();
                     window.history.pushState({}, '', '/');
@@ -208,13 +370,18 @@ async function home() {
             container.append(edit_button);
             container.append(del_button);
 
-            home_page.appendChild(container);
+            page_container.appendChild(container);
         });
+        if (movies.length == 0) {
+            const h3 = document.createElement('h3');
+            h3.innerText = 'There are no movies to show';
+            page_container.appendChild(h3);
+        }
     }
 }
 
 function add() {
-    const add_page = document.getElementById('add');
+    heading.innerText = 'Add Movie';
 
     const container = document.createElement('div');
     const table = document.createElement('table');
@@ -269,12 +436,12 @@ function add() {
         cast_delete.addEventListener('click', (event) => {
             cast_list.removeChild(event.target.parentNode)
         });
-        cast_delete.innerText = "delete";
+        cast_delete.innerText = 'delete';
         cast_item.appendChild(cast_input);
         cast_item.appendChild(cast_delete);
         cast_list.appendChild(cast_item);
     });
-    add_cast.innerText = "add cast";
+    add_cast.innerText = 'add cast';
 
     cast_value.appendChild(cast_list);
     cast_value.appendChild(add_cast);
@@ -296,16 +463,24 @@ function add() {
         body['rating'] = rating_input.value;
         body['movie_cast'] = [];
         for (var i = 0; i < cast_list.children.length; i++) {
-            body['movie_cast'].push(cast_list.children[i].getElementsByTagName("input")[0].value);
+            body['movie_cast'].push(cast_list.children[i].getElementsByTagName('input')[0].value);
         }
-        const response = await fetch('http://localhost:8080/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(body)
-        });
+
+        var response;
+        try {
+            response = await fetch('http://localhost:8080/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(body)
+            });
+        }
+        catch (e) {
+            heading.innerText = 'Server Not Reachable';
+            return;
+        }
         if (response.status == 200) {
             clearErrorMessage();
             window.history.pushState({}, '', '/');
@@ -325,7 +500,7 @@ function add() {
     container.appendChild(table);
     container.append(save_button);
 
-    add_page.appendChild(container);
+    page_container.appendChild(container);
 }
 
 function edit() {
@@ -335,8 +510,12 @@ function edit() {
             element = e;
         }
     });
+    if (!(element)) {
+        window.history.pushState({}, '', '/');
+        handleRoute();
+    }
 
-    const edit_page = document.getElementById('edit');
+    heading.innerText = 'Edit Movie';
 
     const container = document.createElement('div');
     const table = document.createElement('table');
@@ -398,12 +577,12 @@ function edit() {
         cast_delete.addEventListener('click', (event) => {
             cast_list.removeChild(event.target.parentNode)
         });
-        cast_delete.innerText = "delete";
+        cast_delete.innerText = 'delete';
         cast_item.appendChild(cast_input);
         cast_item.appendChild(cast_delete);
         cast_list.appendChild(cast_item);
     });
-    add_cast.innerText = "add cast";
+    add_cast.innerText = 'add cast';
     element['movie_cast'].forEach((e) => {
         const cast_item = document.createElement('li');
         const cast_input = document.createElement('input');
@@ -412,7 +591,7 @@ function edit() {
         cast_delete.addEventListener('click', (event) => {
             cast_list.removeChild(event.target.parentNode)
         });
-        cast_delete.innerText = "delete";
+        cast_delete.innerText = 'delete';
         cast_item.appendChild(cast_input);
         cast_item.appendChild(cast_delete);
         cast_list.appendChild(cast_item);
@@ -440,16 +619,23 @@ function edit() {
         body['rating'] = rating_input.value;
         body['movie_cast'] = [];
         for (var i = 0; i < cast_list.children.length; i++) {
-            body['movie_cast'].push(cast_list.children[i].getElementsByTagName("input")[0].value);
+            body['movie_cast'].push(cast_list.children[i].getElementsByTagName('input')[0].value);
         }
-        const response = await fetch('http://localhost:8080/update', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(body)
-        });
+        var response;
+        try {
+            response = await fetch('http://localhost:8080/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(body)
+            });
+        }
+        catch (e) {
+            heading.innerText = 'Server Not Reachable';
+            return;
+        }
         if (response.status == 200) {
             clearErrorMessage();
             window.history.pushState({}, '', '/');
@@ -469,7 +655,7 @@ function edit() {
     container.appendChild(table);
     container.append(save_button);
 
-    edit_page.appendChild(container);
+    page_container.appendChild(container);
 }
 
 function errorMessage(message) {
@@ -477,7 +663,7 @@ function errorMessage(message) {
 }
 
 function clearErrorMessage() {
-    error_message.innerText = "";
+    error_message.innerText = '';
 }
 
 function route(event) {
@@ -489,12 +675,10 @@ function route(event) {
 
 async function handleRoute() {
     const route_name = window.location.pathname;
-    const route = routes[route_name] || routes[404];
-    const html = await fetch(route).then(res => res.text());
-    document.getElementById('page').innerHTML = html;
-    scripts[route_name]();
+    const func = functions[route_name] || functions[404];
+    page_container.innerHTML = '';
+    func();
 }
 
 window.onpopstate = handleRoute;
-window.history.pushState({}, '', '/');
 handleRoute();
