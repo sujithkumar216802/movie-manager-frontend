@@ -90,7 +90,7 @@ function register() {
         }
         var response;
         try {
-            response = await fetch('http://localhost:8080/register', {
+            response = await fetch('http://139.59.95.247/backend/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -182,7 +182,7 @@ function login() {
         }
         var response;
         try {
-            response = await fetch('http://localhost:8080/login', {
+            response = await fetch('http://139.59.95.247/backend/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -211,7 +211,7 @@ async function logout() {
 
     var response;
     try {
-        response = await fetch('http://localhost:8080/logout', {
+        response = await fetch('http://139.59.95.247/backend/logout', {
             method: 'POST',
             credentials: 'include',
         });
@@ -220,7 +220,7 @@ async function logout() {
         heading.innerText = 'Server Not Reachable';
         return;
     }
-    if (response.status == 200 || response.status >= 401) {
+    if (response.status == 200 || response.status == 401 || response.status == 403) {
         window.history.pushState({}, '', '/login');
         handleRoute();
     }
@@ -248,7 +248,7 @@ async function home() {
 
     var movies_fetch
     try {
-        movies_fetch = await fetch('http://localhost:8080/', {
+        movies_fetch = await fetch('http://139.59.95.247/backend/', {
             method: 'GET',
             credentials: 'include',
         });
@@ -257,7 +257,7 @@ async function home() {
         heading.innerText = 'Server Not Reachable';
         return;
     }
-    if (movies_fetch.status >= 401) {
+    if (movies_fetch.status == 401 || movies_fetch.status == 403) {
         if (movies_fetch.status == 403) {
             errorMessage('Session Expired');
         }
@@ -337,7 +337,7 @@ async function home() {
             del_button.addEventListener('click', async (event) => {
                 var response;
                 try {
-                    response = await fetch('http://localhost:8080/delete', {
+                    response = await fetch('http://139.59.95.247/backend/delete', {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -355,7 +355,7 @@ async function home() {
                     window.history.pushState({}, '', '/');
                     handleRoute();
                 }
-                else if (response.status >= 401) {
+                else if (response.status == 401 || response.status == 403) {
                     errorMessage('Session Expired');
                     window.history.pushState({}, '', '/login');
                     handleRoute();
@@ -468,7 +468,7 @@ function add() {
 
         var response;
         try {
-            response = await fetch('http://localhost:8080/add', {
+            response = await fetch('http://139.59.95.247/backend/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -486,7 +486,7 @@ function add() {
             window.history.pushState({}, '', '/');
             handleRoute();
         }
-        else if (response.status >= 401) {
+        else if (response.status == 401 || response.status == 403) {
             errorMessage('Session Expired');
             window.history.pushState({}, '', '/login');
             handleRoute();
@@ -623,7 +623,7 @@ function edit() {
         }
         var response;
         try {
-            response = await fetch('http://localhost:8080/update', {
+            response = await fetch('http://139.59.95.247/backend/update', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -641,7 +641,7 @@ function edit() {
             window.history.pushState({}, '', '/');
             handleRoute();
         }
-        else if (response.status >= 401) {
+        else if (response.status == 401 || response.status == 403) {
             errorMessage('Session Expired');
             window.history.pushState({}, '', '/login');
             handleRoute();
