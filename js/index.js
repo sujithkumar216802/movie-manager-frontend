@@ -1,3 +1,5 @@
+const base_url = "";
+
 const functions = {
     404: notFound,
     '/': home,
@@ -90,7 +92,7 @@ function register() {
         }
         var response;
         try {
-            response = await fetch('http://139.59.95.247/backend/register', {
+            response = await fetch(`${base_url}/backend/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -182,7 +184,7 @@ function login() {
         }
         var response;
         try {
-            response = await fetch('http://139.59.95.247/backend/login', {
+            response = await fetch(`${base_url}/backend/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -211,7 +213,7 @@ async function logout() {
 
     var response;
     try {
-        response = await fetch('http://139.59.95.247/backend/logout', {
+        response = await fetch(`${base_url}/backend/logout`, {
             method: 'POST',
             credentials: 'include',
         });
@@ -248,7 +250,7 @@ async function home() {
 
     var movies_fetch
     try {
-        movies_fetch = await fetch('http://139.59.95.247/backend/', {
+        movies_fetch = await fetch(`${base_url}/backend/`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -337,7 +339,7 @@ async function home() {
             del_button.addEventListener('click', async (event) => {
                 var response;
                 try {
-                    response = await fetch('http://139.59.95.247/backend/delete', {
+                    response = await fetch(`${base_url}/backend/delete`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -468,7 +470,7 @@ function add() {
 
         var response;
         try {
-            response = await fetch('http://139.59.95.247/backend/add', {
+            response = await fetch(`${base_url}/backend/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -623,7 +625,7 @@ function edit() {
         }
         var response;
         try {
-            response = await fetch('http://139.59.95.247/backend/update', {
+            response = await fetch(`${base_url}/backend/update`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
